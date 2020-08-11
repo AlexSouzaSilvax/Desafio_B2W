@@ -5,10 +5,8 @@
  */
 package API;
 
-import Planeta.PlanetaBean;
 import Planeta.PlanetaService;
 import com.google.gson.Gson;
-import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -48,8 +46,6 @@ public class PlanetaAPI {
         Gson gson = new Gson();
         return gson.toJson(planetaService.listar());
     }
-    
-    
 
     /**
      * PUT method for updating or creating an instance of PlanetaAPI

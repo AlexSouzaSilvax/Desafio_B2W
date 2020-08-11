@@ -6,9 +6,7 @@
 package Planeta;
 
 import Util.Conexao;
-import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
@@ -24,56 +22,30 @@ public class PlanetaDAO {
 
     Conexao conexao = new Conexao();
     BasicDBObject Document = new BasicDBObject();
-    //MongoDatabase database;
 
-    Block<Document> printBlock = new Block<Document>() {
-        @Override
-        public void apply(final Document document) {
-            PlanetaBean p = new PlanetaBean();
-            ObjectId nome = new ObjectId(document.get("_id").toString());
-            p.setId(nome.toString());
-            p.setNome((String) document.get("nome"));
-            p.setClima((String) document.get("clima"));
-            p.setTerreno((String) document.get("terreno"));
-            p.setQtdAparicoesFilmes(buscarQtdAparicoesFilmes(p.getNome()));
-            planetaJson(p);
-        }
-    };
-
-    public void inserir(String nome, String clima, String terreno) {
-        MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+    public void inserir(PlanetaBean p) {
         try {
-            Document document = new Document("nome", nome)
-                    .append("clima", clima)
-                    .append("terreno", terreno);
-
+            MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+            Document document = new Document("nome", p.getNome())
+                    .append("clima", p.getClima())
+                    .append("terreno", p.getTerreno());
             planeta.insertOne(document);
         } catch (Exception e) {
             System.out.println("----------------------------> PlanetaDAO - inserir(String nome, String clima, String terreno) " + e);
         }
     }
 
-    /*public void listar() {
-        MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
-        try {
-            planeta.find().forEach(printBlock);
-        } catch (Exception e) {
-            System.out.println("----------------------------> " + e);
-        }
-    }
-     */
     public List<PlanetaBean> listar() {
         try {
             MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
             List<PlanetaBean> planetas = new ArrayList<>();
-            PlanetaBean p = new PlanetaBean();
             for (Document doc : planeta.find()) {
-                ObjectId nome = new ObjectId(doc.get("_id").toString());
-                p.setId(nome.toString());
+                PlanetaBean p = new PlanetaBean();
+                ObjectId id = new ObjectId(doc.get("_id").toString());
+                p.setId(id.toString());
                 p.setNome((String) doc.get("nome"));
                 p.setClima((String) doc.get("clima"));
                 p.setTerreno((String) doc.get("terreno"));
-                p.setQtdAparicoesFilmes(buscarQtdAparicoesFilmes(p.getNome()));
                 planetas.add(p);
             }
             return planetas;
@@ -83,46 +55,54 @@ public class PlanetaDAO {
         return null;
     }
 
-    public void buscaPorNome(String nome) {
-        MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+    public List<PlanetaBean> buscaPorNome(String nome) {
         try {
-            planeta.find(eq("nome", nome))
-                    .forEach(printBlock);
+            MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+            List<PlanetaBean> planetas = new ArrayList<>();
+            for (Document doc : planeta.find(eq("nome", nome))) {
+                PlanetaBean p = new PlanetaBean();
+                ObjectId id = new ObjectId(doc.get("_id").toString());
+                p.setId(id.toString());
+                p.setNome((String) doc.get("nome"));
+                p.setClima((String) doc.get("clima"));
+                p.setTerreno((String) doc.get("terreno"));
+                planetas.add(p);
+            }
+            return planetas;
         } catch (Exception e) {
             System.out.println("----------------------------> PlanetaDAO - buscaPorNome(String nome) " + e);
         }
+        return null;
     }
 
-    public void buscaPorId(ObjectId id) {
-        MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+    public List<PlanetaBean> buscaPorId(ObjectId id) {
         try {
-            planeta.find(eq("_id", id))
-                    .forEach(printBlock);
+            MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+            List<PlanetaBean> planetas = new ArrayList<>();
+            for (Document doc : planeta.find(eq("_id", id))) {
+                PlanetaBean p = new PlanetaBean();
+                ObjectId _id = new ObjectId(doc.get("_id").toString());
+                p.setId(_id.toString());
+                p.setNome((String) doc.get("nome"));
+                p.setClima((String) doc.get("clima"));
+                p.setTerreno((String) doc.get("terreno"));
+                planetas.add(p);
+            }
+            return planetas;
         } catch (Exception e) {
             System.out.println("----------------------------> PlanetaDAO - buscaPorId(ObjectId id) " + e);
 
         }
+        return null;
     }
 
     public void remover(ObjectId _id) {
-        MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
         try {
-
+            MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
             planeta.deleteOne(eq("_id", _id));
             System.out.println("Removeu com sucesso!");
         } catch (Exception e) {
             System.out.println("----------------------------> PlanetaDAO - remover(ObjectId _id) " + e);
         }
-    }
-
-    public String planetaJson(PlanetaBean p) {
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(p));
-        return gson.toJson(p);
-    }
-
-    public String buscarQtdAparicoesFilmes(String nome) {
-        String qtd = "0";
-        return qtd;
     }
 }
