@@ -13,16 +13,17 @@ import org.bson.types.ObjectId;
  */
 public class PlanetaBean {
 
-    private ObjectId _id;
+    private String _id;
     private String nome;
     private String clima;
     private String terreno;
+    private String qtdAparicoesFilmes;
 
-    public ObjectId getId() {
+    public String getId() {
         return _id;
     }
 
-    public void setId(ObjectId _id) {
+    public void setId(String _id) {
         this._id = _id;
     }
 
@@ -48,6 +49,14 @@ public class PlanetaBean {
 
     public void setTerreno(String terreno) {
         this.terreno = terreno;
+    }
+
+    public String getQtdAparicoesFilmes() {
+        return qtdAparicoesFilmes;
+    }
+
+    public void setQtdAparicoesFilmes(String qtdAparicoesFilmes) {
+        this.qtdAparicoesFilmes = qtdAparicoesFilmes;
     }
 
 }
