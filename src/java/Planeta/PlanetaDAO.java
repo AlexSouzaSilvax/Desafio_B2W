@@ -99,8 +99,7 @@ public class PlanetaDAO {
     public void remover(ObjectId _id) {
         try {
             MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
-            planeta.deleteOne(eq("_id", _id));
-            System.out.println("Removeu com sucesso!");
+            planeta.deleteOne(eq("_id", _id));            
         } catch (Exception e) {
             System.out.println("----------------------------> PlanetaDAO - remover(ObjectId _id) " + e);
         }

@@ -5,8 +5,6 @@
  */
 package Planeta;
 
-import org.bson.types.ObjectId;
-
 /**
  *
  * @author homer

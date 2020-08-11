@@ -15,16 +15,6 @@ import org.bson.types.ObjectId;
  */
 public class PlanetaService {
 
-    /*
-    public static void main(String[] args) {
-        PlanetaDAO planetaDAO = new PlanetaDAO();
-        PlanetaService pS = new PlanetaService();
-        for (PlanetaBean p : pS.buscarQtdAparicoesFilmes(planetaDAO.listar())) {
-            System.out.println("\n<--------------------------------------------------------------------------------------------------->");
-            System.out.println("ID: " + p.getId() + ", NOME: " + p.getNome() + ", CLIMA: " + p.getClima() + ", TERRENO: " + p.getTerreno() + ", QUANTIDADE DE APARIÇÕES EM FILMES: " + p.getQtdAparicoesFilmes());
-            System.out.println("<--------------------------------------------------------------------------------------------------->\n");
-        }
-    }*/
     PlanetaDAO planetaDAO = new PlanetaDAO();
     PlanetasStarWarsBean planetasStarWarsBean = new PlanetasStarWarsBean();
 
