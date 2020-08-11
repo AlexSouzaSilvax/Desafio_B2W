@@ -10,8 +10,9 @@ import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
+import java.util.ArrayList;
+import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -48,17 +49,38 @@ public class PlanetaDAO {
 
             planeta.insertOne(document);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("----------------------------> PlanetaDAO - inserir(String nome, String clima, String terreno) " + e);
         }
     }
 
-    public void listar() {
+    /*public void listar() {
         MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
         try {
             planeta.find().forEach(printBlock);
         } catch (Exception e) {
             System.out.println("----------------------------> " + e);
         }
+    }
+     */
+    public List<PlanetaBean> listar() {
+        try {
+            MongoCollection<Document> planeta = conexao.getDatabase().getCollection("Planeta");
+            List<PlanetaBean> planetas = new ArrayList<>();
+            PlanetaBean p = new PlanetaBean();
+            for (Document doc : planeta.find()) {
+                ObjectId nome = new ObjectId(doc.get("_id").toString());
+                p.setId(nome.toString());
+                p.setNome((String) doc.get("nome"));
+                p.setClima((String) doc.get("clima"));
+                p.setTerreno((String) doc.get("terreno"));
+                p.setQtdAparicoesFilmes(buscarQtdAparicoesFilmes(p.getNome()));
+                planetas.add(p);
+            }
+            return planetas;
+        } catch (Exception e) {
+            System.out.println("----------------------------> PlanetaDAO - listar() " + e);
+        }
+        return null;
     }
 
     public void buscaPorNome(String nome) {
@@ -67,7 +89,7 @@ public class PlanetaDAO {
             planeta.find(eq("nome", nome))
                     .forEach(printBlock);
         } catch (Exception e) {
-            System.out.println("----------------------------> " + e);
+            System.out.println("----------------------------> PlanetaDAO - buscaPorNome(String nome) " + e);
         }
     }
 
@@ -77,7 +99,8 @@ public class PlanetaDAO {
             planeta.find(eq("_id", id))
                     .forEach(printBlock);
         } catch (Exception e) {
-            System.out.println("----------------------------> " + e);
+            System.out.println("----------------------------> PlanetaDAO - buscaPorId(ObjectId id) " + e);
+
         }
     }
 
@@ -88,7 +111,7 @@ public class PlanetaDAO {
             planeta.deleteOne(eq("_id", _id));
             System.out.println("Removeu com sucesso!");
         } catch (Exception e) {
-            System.out.println("------------------------------------------------------> " + e);
+            System.out.println("----------------------------> PlanetaDAO - remover(ObjectId _id) " + e);
         }
     }
 

@@ -5,9 +5,7 @@
  */
 package Planeta;
 
-import com.google.gson.Gson;
-import com.mongodb.Block;
-import org.bson.Document;
+import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
@@ -16,29 +14,26 @@ import org.bson.types.ObjectId;
  */
 public class PlanetaService {
 
-    Block<Document> printBlock = new Block<Document>() {
-        @Override
-        public void apply(final Document document) {
-            PlanetaBean p = new PlanetaBean();
-            ObjectId nome = new ObjectId(document.get("_id").toString());
-            p.setId(nome.toString());
-            p.setNome((String) document.get("nome"));
-            p.setClima((String) document.get("clima"));
-            p.setTerreno((String) document.get("terreno"));
-            p.setQtdAparicoesFilmes(buscarQtdAparicoesFilmes(p.getNome()));
-            planetaJson(p);
-        }
-    };
+    PlanetaDAO planetaDAO = new PlanetaDAO();
 
-    public String planetaJson(PlanetaBean p) {
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(p));
-        return gson.toJson(p);
+    public List<PlanetaBean> listar() {
+        return planetaDAO.listar();
     }
 
-    public String buscarQtdAparicoesFilmes(String nome) {
-        String qtd = "0";
-        return qtd;
+    public void buscarPorNome(String nome) {
+        planetaDAO.buscaPorNome(nome);
+    }
+
+    public void buscarPorId(String id) {
+        planetaDAO.buscaPorId(new ObjectId(id));
+    }
+
+    public void inserir(String nome, String clima, String terreno) {
+        planetaDAO.inserir(nome, clima, terreno);
+    }
+
+    public void remover(String id) {
+        planetaDAO.remover(new ObjectId(id));
     }
 
 }
